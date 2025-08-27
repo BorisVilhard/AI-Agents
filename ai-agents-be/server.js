@@ -43,7 +43,6 @@ passport.use(
 			callbackURL: process.env.GOOGLE_REDIRECT_URI,
 		},
 		(accessToken, refreshToken, profile, done) => {
-			console.log('User profile:', profile);
 			return done(null, { profile, accessToken, refreshToken });
 		}
 	)

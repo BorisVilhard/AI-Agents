@@ -259,11 +259,7 @@ const useVoiceAssistant = () => {
 				audioContextRef.current &&
 				audioContextRef.current.state !== 'closed'
 			) {
-				audioContextRef.current
-					.close()
-					.catch((err) =>
-						console.error('Error closing AudioContext in cleanup:', err)
-					);
+				audioContextRef.current.close();
 			}
 			if (animationRef.current) {
 				cancelAnimationFrame(animationRef.current);

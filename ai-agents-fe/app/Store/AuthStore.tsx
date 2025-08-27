@@ -38,13 +38,6 @@ const useAuthStore = create<AuthStore>()(
 			lastUserUpdate: 0,
 
 			setCredentials: (id, username, email, accessToken) => {
-				console.log('setCredentials:', {
-					id,
-					username,
-					email,
-					accessToken: !!accessToken,
-				});
-
 				set((state) => ({
 					id,
 					username,
@@ -55,7 +48,6 @@ const useAuthStore = create<AuthStore>()(
 			},
 
 			logOut: () => {
-				console.log('logOut called');
 				set({
 					id: null,
 					username: null,
@@ -68,7 +60,6 @@ const useAuthStore = create<AuthStore>()(
 			},
 
 			refreshAccessToken: async () => {
-				console.log('refreshAccessToken called');
 				try {
 					const response = await fetch(
 						`${process.env.NEXT_PUBLIC_BACKEND_URL}/email/auth/refresh-token`,
@@ -80,13 +71,10 @@ const useAuthStore = create<AuthStore>()(
 
 					if (response.ok) {
 						const data = await response.json();
-						console.log('refreshAccessToken response:', { data });
-
 						if (
 							data.tokens !== undefined &&
 							(typeof data.tokens !== 'number' || data.tokens < 0)
 						) {
-							console.error('Invalid tokens value:', data.tokens);
 							return false;
 						}
 
@@ -99,26 +87,20 @@ const useAuthStore = create<AuthStore>()(
 						});
 						return true;
 					} else {
-						console.log('refreshAccessToken failed:', response.status);
 						return false;
 					}
 				} catch (error) {
-					console.error('Failed to refresh access token:', error);
 					return false;
 				}
 			},
 
 			setRehydrated: (value) => {
-				console.log('setRehydrated:', value);
 				set({ isRehydrated: value });
 			},
 
 			makeAuthenticatedRequest: async (url, options = {}) => {
 				const accessToken = get().accessToken;
-				console.log('makeAuthenticatedRequest:', {
-					url,
-					hasToken: !!accessToken,
-				});
+
 				if (!accessToken) {
 					throw new Error('No access token available');
 				}
@@ -137,7 +119,7 @@ const useAuthStore = create<AuthStore>()(
 
 				try {
 					const response = await fetch(url, fetchOptions);
-					console.log('makeAuthenticatedRequest response:', response.status);
+
 					if (response.status === 401) {
 						const refreshed = await get().refreshAccessToken();
 						if (refreshed) {
@@ -153,7 +135,6 @@ const useAuthStore = create<AuthStore>()(
 					}
 					return response;
 				} catch (error) {
-					console.error('makeAuthenticatedRequest failed:', error);
 					throw error;
 				}
 			},
@@ -162,7 +143,6 @@ const useAuthStore = create<AuthStore>()(
 			name: 'auth-storage',
 			getStorage: () => localStorage,
 			onRehydrateStorage: () => (state) => {
-				console.log('onRehydrateStorage:', state);
 				if (state) {
 					if (state.isRehydrated && !state.accessToken) {
 						state.logOut();

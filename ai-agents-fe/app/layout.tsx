@@ -33,7 +33,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
 					handleGoogleSuccess(response);
 				},
 				error_callback: (error: any) => {
-					console.error('Google OAuth error:', error);
 					handleGoogleFailure();
 				},
 			});
@@ -67,7 +66,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
 			if (!res.ok) {
 				const text = await res.text();
-				console.error('Backend response:', text);
 				throw new Error(text);
 			}
 
@@ -76,7 +74,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
 			store.setCredentials(id, username, email, accessToken);
 			toast.success(`Vitajte, ${username}!`);
 		} catch (error: any) {
-			console.error('Chyba pri autentifikácii cez Google:', error);
 			toast.error(error.message || 'Autentifikácia cez Google zlyhala.');
 		}
 	};
@@ -92,7 +89,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
 					src='https://accounts.google.com/gsi/client'
 					strategy='afterInteractive'
 					onLoad={() => {
-						console.log('Google SDK loaded');
 						initGoogle();
 					}}
 				/>

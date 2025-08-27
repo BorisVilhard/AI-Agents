@@ -201,7 +201,6 @@ const AIAssistantChat = ({
 					timestamp: new Date().toISOString(),
 				};
 				setMessages((prev) => [...prev, errorMessage]);
-				console.error('Error in handleSubmit:', error);
 			} finally {
 				setIsTyping(false);
 			}
@@ -234,7 +233,6 @@ const AIAssistantChat = ({
 					throw new Error('Failed to delete document');
 				}
 			} catch (error) {
-				console.error('Error deleting document:', error);
 				const errorMessage: Message = {
 					id: generateId(),
 					role: 'assistant',

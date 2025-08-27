@@ -52,12 +52,9 @@ export const handleAuth = async (req, tokens, payload) => {
 		);
 	}
 
-	console.log(`User logged in via Google: ${email}`);
-
 	return new Promise((resolve, reject) => {
 		req.login(user, (err) => {
 			if (err) {
-				console.error('Passport login error:', err);
 				reject(err);
 			} else {
 				resolve(user);

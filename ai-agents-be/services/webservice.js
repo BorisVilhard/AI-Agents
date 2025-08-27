@@ -41,14 +41,13 @@ export const searchAndScrape = async (parameters) => {
 			waitUntil: 'domcontentloaded',
 			timeout: 60000,
 		});
-		console.log('Web agent: Navigated to Redfin');
+
 		try {
 			const cookieSelector =
 				'button[class*="accept"], button[id*="cookie"], button[aria-label*="cookie"], button[aria-label*="accept"]';
 			await page.waitForSelector(cookieSelector, { timeout: 5000 });
 			await page.click(cookieSelector);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
-			console.log('Web agent: Accepted cookies');
 		} catch (e) {
 			console.log('Web agent: No cookies to accept');
 		}
@@ -56,44 +55,38 @@ export const searchAndScrape = async (parameters) => {
 			'input#search-box-input.search-input-box[data-rf-test-name="search-box-input"]';
 		await page.waitForSelector(inputSelector, { timeout: 30000 });
 		await page.type(inputSelector, location);
-		console.log('Web agent: Typed location ' + location);
 		await new Promise((resolve) => setTimeout(resolve, 2000));
 		const buttonSelector =
 			'button[data-rf-test-name="searchButton"][aria-label="submit search"]';
 		await page.waitForSelector(buttonSelector, { timeout: 30000 });
 		const oldUrl = await page.url();
 		await page.click(buttonSelector);
-		console.log('Web agent: Clicked search button');
 		await page.waitForFunction(
 			(old) => window.location.href !== old,
 			{ timeout: 60000 },
 			oldUrl
 		);
-		console.log('Web agent: Navigated to search results');
 		await new Promise((resolve) => setTimeout(resolve, 10000));
-		console.log('Web agent: Waited after navigation');
-		// Click on the "All filters" button
 		await page.waitForSelector('div[data-rf-test-id="filterButton"] button', {
 			timeout: 30000,
 		});
 		await page.click('div[data-rf-test-id="filterButton"] button');
-		console.log('Web agent: Clicked all filters button');
 		await new Promise((resolve) => setTimeout(resolve, 5000));
-		// Enter min price
+
 		if (min_price) {
 			const minInputSelector =
 				'input.InputWrapper__input[placeholder="Enter min"]';
 			await page.waitForSelector(minInputSelector, { timeout: 30000 });
 			await page.type(minInputSelector, min_price);
 		}
-		// Enter max price
+
 		if (max_price) {
 			const maxInputSelector =
 				'input.InputWrapper__input[placeholder="Enter max"]';
 			await page.waitForSelector(maxInputSelector, { timeout: 30000 });
 			await page.type(maxInputSelector, max_price);
 		}
-		// Select bedrooms
+
 		if (bedrooms) {
 			let mappedBedrooms = bedrooms;
 			if (parseInt(bedrooms) > 4) {
@@ -107,7 +100,7 @@ export const searchAndScrape = async (parameters) => {
 			await page.click(bedroomsSelector);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		// Select bathrooms
+
 		if (bathrooms) {
 			let mappedBathrooms = bathrooms;
 			if (!bathrooms.endsWith('+')) {
@@ -124,7 +117,6 @@ export const searchAndScrape = async (parameters) => {
 			await page.click(bathroomsSelector);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		// Select property type
 		if (property_type) {
 			const houseSelector =
 				'div.bp-ItemPicker__option[role="option"]:has(label[for="' +
@@ -134,14 +126,14 @@ export const searchAndScrape = async (parameters) => {
 			await page.click(houseSelector);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		// Select sqft min
+
 		if (min_sqft) {
 			const sqftMinSelect = 'select[name="sqftMin"]';
 			await page.waitForSelector(sqftMinSelect, { timeout: 30000 });
 			await page.select(sqftMinSelect, min_sqft);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		// Select sqft max
+
 		if (max_sqft) {
 			const sqftMaxSelect = 'select[name="sqftMax"]';
 			await page.waitForSelector(sqftMaxSelect, { timeout: 30000 });
@@ -157,7 +149,7 @@ export const searchAndScrape = async (parameters) => {
 		await new Promise((resolve) => setTimeout(resolve, 10000));
 
 		await page.waitForSelector('div.HomeCardsContainer', { timeout: 30000 });
-		// Scrape data
+
 		const listings = await page.evaluate(() => {
 			const homeCards = Array.from(
 				document.querySelectorAll(
@@ -206,9 +198,7 @@ export const searchAndScrape = async (parameters) => {
 			}
 			return validListings;
 		});
-		console.log(
-			'Web agent: Scraped listings: ' + JSON.stringify(listings, null, 2)
-		);
+
 		await browser.close();
 		fs.rmSync(tempDir, { recursive: true, force: true });
 		return `Listings after filters: ${JSON.stringify(listings)}`;

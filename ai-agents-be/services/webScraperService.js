@@ -33,7 +33,6 @@ export const fetchWebsiteContent = async (website) => {
 };
 
 const fetchFallback = async (website) => {
-	console.warn(`Fallback: Trying about page for ${website}`);
 	try {
 		const aboutUrl = new URL(website);
 		let aboutPath = '/about';
@@ -59,7 +58,6 @@ const fetchFallback = async (website) => {
 };
 
 const fetchWithPuppeteer = async (website) => {
-	console.warn(`Puppeteer fallback for ${website}`);
 	const browser = await puppeteer.launch({ headless: true });
 	const page = await browser.newPage();
 	await page.setUserAgent(headers['User-Agent']);

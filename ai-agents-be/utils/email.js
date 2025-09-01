@@ -1,6 +1,6 @@
-import fs from 'fs';
+const fs = require('fs');
 
-export const getRefreshToken = (req) => {
+const getRefreshToken = (req) => {
 	return (
 		req.cookies.google_refresh_token ||
 		(fs.existsSync('token.json')
@@ -9,7 +9,7 @@ export const getRefreshToken = (req) => {
 	);
 };
 
-export const createEmailRaw = (to, from, subject, body) => {
+const createEmailRaw = (to, from, subject, body) => {
 	const raw = [
 		`To: ${to}`,
 		`From: ${from}`,
@@ -24,7 +24,9 @@ export const createEmailRaw = (to, from, subject, body) => {
 		.replace(/=+$/, '');
 };
 
-export const isValidEmail = (email) => {
+const isValidEmail = (email) => {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	return emailRegex.test(email);
 };
+
+module.exports = { getRefreshToken, createEmailRaw, isValidEmail };

@@ -1,16 +1,16 @@
-import axios from 'axios';
-import fs from 'fs';
-import fsp from 'fs/promises';
-import path from 'path';
-import os from 'os';
-import FormData from 'form-data';
-import ElevenLabsSDK from 'elevenlabs-node';
+const axios = require('axios');
+const fs = require('fs');
+const fsp = require('fs/promises');
+const path = require('path');
+const os = require('os');
+const FormData = require('form-data');
+const ElevenLabsSDK = require('elevenlabs-node');
 
 const elevenLabs = new ElevenLabsSDK({
 	apiKey: process.env.ELEVENLABS_API_KEY,
 });
 
-export const speechToText = async (audioBuffer) => {
+const speechToText = async (audioBuffer) => {
 	try {
 		const tempDir = await fsp.mkdtemp(path.join(os.tmpdir(), 'audio-'));
 		const tempPath = path.join(tempDir, 'temp_audio.mp3');
@@ -35,7 +35,7 @@ export const speechToText = async (audioBuffer) => {
 	}
 };
 
-export const textToSpeech = async (text) => {
+const textToSpeech = async (text) => {
 	try {
 		const stream = await elevenLabs.textToSpeechStream({
 			textInput: text,
@@ -61,3 +61,5 @@ export const textToSpeech = async (text) => {
 		throw new Error(`Text-to-speech failed: ${error.message}`);
 	}
 };
+
+module.exports = { speechToText, textToSpeech };

@@ -1,6 +1,6 @@
-import { OAuth2Client } from 'google-auth-library';
-import fs from 'fs';
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../contsants.js';
+const { OAuth2Client } = require('google-auth-library');
+const fs = require('fs');
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = require('../constants.JS');
 
 const client = new OAuth2Client(
 	GOOGLE_CLIENT_ID,
@@ -8,12 +8,12 @@ const client = new OAuth2Client(
 	'postmessage'
 );
 
-export const exchangeCodeForTokens = async (code) => {
+const exchangeCodeForTokens = async (code) => {
 	const { tokens } = await client.getToken({ code });
 	return tokens;
 };
 
-export const verifyIdToken = async (idToken) => {
+const verifyIdToken = async (idToken) => {
 	const ticket = await client.verifyIdToken({
 		idToken,
 		audience: GOOGLE_CLIENT_ID,
@@ -21,7 +21,7 @@ export const verifyIdToken = async (idToken) => {
 	return ticket.getPayload();
 };
 
-export const handleAuth = async (req, tokens, payload) => {
+const handleAuth = async (req, tokens, payload) => {
 	const { sub: googleId, email, name } = payload;
 
 	if (email !== 'fastandfresh4u@gmail.com') {
@@ -62,3 +62,5 @@ export const handleAuth = async (req, tokens, payload) => {
 		});
 	});
 };
+
+module.exports = { exchangeCodeForTokens, verifyIdToken, handleAuth };

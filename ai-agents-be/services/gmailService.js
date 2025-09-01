@@ -1,8 +1,8 @@
-import { google } from 'googleapis';
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '../constants.js';
-import { createEmailRaw } from '../utils.js';
+const { google } = require('googleapis');
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = require('../constants.js');
+const { createEmailRaw } = require('../utils/email.js');
 
-export const getUserEmail = async (accessToken) => {
+const getUserEmail = async (accessToken) => {
 	const fetch = (await import('node-fetch')).default;
 	const userInfoRes = await fetch(
 		'https://www.googleapis.com/oauth2/v3/userinfo',
@@ -17,7 +17,7 @@ export const getUserEmail = async (accessToken) => {
 	return userInfo.email;
 };
 
-export const sendEmail = async (refreshToken, to, subject, body) => {
+const sendEmail = async (refreshToken, to, subject, body) => {
 	const oauth2Client = new google.auth.OAuth2(
 		GOOGLE_CLIENT_ID,
 		GOOGLE_CLIENT_SECRET
@@ -48,3 +48,5 @@ export const sendEmail = async (refreshToken, to, subject, body) => {
 		resource: { raw },
 	});
 };
+
+module.exports = { getUserEmail, sendEmail };

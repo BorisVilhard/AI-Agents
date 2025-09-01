@@ -1,10 +1,10 @@
-import { searchAndScrape } from '../services/webservice.js';
-import { speechToText, textToSpeech } from '../services/speechService.js';
-import { processSingleStep } from '../services/aiService.js';
-import { pendingActions } from '../storage.js';
-import { MAX_MESSAGES, MAX_LOOP } from '../constants.js';
+const { speechToText, textToSpeech } = require('../services/speechService.js');
+const { searchAndScrape } = require('../services/webservice.js');
+const { processSingleStep } = require('../services/openAiService.js');
+const { pendingActions } = require('../storage.js');
+const { MAX_MESSAGES, MAX_LOOP } = require('../constants.js');
 
-export const createOrUpdateChat = async (req, res) => {
+const createOrUpdateChat = async (req, res) => {
 	try {
 		const { userId } = req.params;
 		const { messages, dashboardId, dashboardName } = req.body;
@@ -51,7 +51,7 @@ export const createOrUpdateChat = async (req, res) => {
 	}
 };
 
-export const createOrUpdateVoiceChat = async (req, res) => {
+const createOrUpdateVoiceChat = async (req, res) => {
 	try {
 		const { userId } = req.params;
 		const {
@@ -133,3 +133,5 @@ export const createOrUpdateVoiceChat = async (req, res) => {
 		res.status(error.status || 500).json({ error: error.message });
 	}
 };
+
+module.exports = { createOrUpdateChat, createOrUpdateVoiceChat };

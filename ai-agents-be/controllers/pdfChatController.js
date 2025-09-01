@@ -1,10 +1,10 @@
-import {
+const {
 	uploadDocuments,
 	deleteDocument,
-} from '../services/documentService.js';
-import { processChatMessage, getChat } from '../services/chatService.js';
+} = require('../services/documentService.js');
+const { processChatMessage, getChat } = require('../services/chatService.js');
 
-export const uploadDocumentsController = async (req, res) => {
+const uploadDocumentsController = async (req, res) => {
 	try {
 		const { userId } = req.params;
 		const files = req.files;
@@ -22,7 +22,7 @@ export const uploadDocumentsController = async (req, res) => {
 	}
 };
 
-export const deleteDocumentController = async (req, res) => {
+const deleteDocumentController = async (req, res) => {
 	try {
 		const { userId, fileName } = req.params;
 
@@ -38,7 +38,7 @@ export const deleteDocumentController = async (req, res) => {
 	}
 };
 
-export const createOrUpdateChat = async (req, res) => {
+const createOrUpdateChat = async (req, res) => {
 	try {
 		const { userId } = req.params;
 		const { message } = req.body;
@@ -58,7 +58,7 @@ export const createOrUpdateChat = async (req, res) => {
 	}
 };
 
-export const getChatById = async (req, res) => {
+const getChatById = async (req, res) => {
 	try {
 		const { userId } = req.params;
 
@@ -72,4 +72,11 @@ export const getChatById = async (req, res) => {
 		}
 		res.status(500).json({ error: error.message });
 	}
+};
+
+module.exports = {
+	uploadDocumentsController,
+	deleteDocumentController,
+	createOrUpdateChat,
+	getChatById,
 };

@@ -1,10 +1,10 @@
-import { ChatOpenAI } from '@langchain/openai';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { chatStorage } from '../storage.js';
-import { formatMessage } from '../utils.js';
-import { PDF_TEMPLATE, MAX_MESSAGES } from '../constants.js';
+const { ChatOpenAI } = require('@langchain/openai');
+const { ChatPromptTemplate } = require('@langchain/core/prompts');
+const { chatStorage } = require('../storage.js');
+const { formatMessage } = require('../utils/formatMessage.js');
+const { PDF_TEMPLATE, MAX_MESSAGES } = require('../constants.js');
 
-export const processChatMessage = async (userId, message) => {
+const processChatMessage = async (userId, message) => {
 	let chat = chatStorage.get(userId) || {
 		userId,
 		messages: [],
@@ -52,7 +52,7 @@ export const processChatMessage = async (userId, message) => {
 	return assistantText;
 };
 
-export const getChat = (userId) => {
+const getChat = (userId) => {
 	const chat = chatStorage.get(userId);
 	if (!chat) {
 		throw new Error('Chat not found');
@@ -63,3 +63,5 @@ export const getChat = (userId) => {
 		fileNames: Object.keys(chat.fileContentsMap || {}),
 	};
 };
+
+module.exports = { processChatMessage, getChat };

@@ -1,1 +1,3 @@
-export const formatMessage = (msg) => `${msg.role}: ${msg.content}`;
+const formatMessage = (msg) => `${msg.role}: ${msg.content}`;
+
+module.exports = { formatMessage };

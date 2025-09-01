@@ -1,7 +1,7 @@
-import pdfParse from 'pdf-parse';
-import { chatStorage } from '../storage.js';
+const pdfParse = require('pdf-parse');
+const { chatStorage } = require('../storage.js');
 
-export const uploadDocuments = async (userId, files) => {
+const uploadDocuments = async (userId, files) => {
 	let chat = chatStorage.get(userId) || {
 		userId,
 		messages: [],
@@ -20,7 +20,7 @@ export const uploadDocuments = async (userId, files) => {
 	chatStorage.set(userId, chat);
 };
 
-export const deleteDocument = (userId, fileName) => {
+const deleteDocument = (userId, fileName) => {
 	let chat = chatStorage.get(userId);
 	if (!chat || !chat.fileContentsMap[fileName]) {
 		throw new Error('File not found');
@@ -28,3 +28,5 @@ export const deleteDocument = (userId, fileName) => {
 	delete chat.fileContentsMap[fileName];
 	chatStorage.set(userId, chat);
 };
+
+module.exports = { uploadDocuments, deleteDocument };

@@ -1,2 +1,4 @@
-export const pendingActions = new Map();
-export const chatStorage = new Map();
+const pendingActions = new Map();
+const chatStorage = new Map();
+
+module.exports = { pendingActions, chatStorage };

@@ -1,10 +1,10 @@
-import OpenAI from 'openai';
+const OpenAI = require('openai');
 
 const apiKey = process.env.OPENAI_API_KEY;
 
 const openai = new OpenAI({ apiKey });
 
-export const analyzeBusiness = async (
+const analyzeBusiness = async (
 	extractedText,
 	name,
 	demographic,
@@ -24,3 +24,5 @@ export const analyzeBusiness = async (
 
 	return JSON.parse(completion.choices[0].message.content);
 };
+
+module.exports = { analyzeBusiness };

@@ -1,8 +1,8 @@
-import puppeteer from 'puppeteer';
-import fs from 'fs';
-import path from 'path';
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+const path = require('path');
 
-export const searchAndScrape = async (parameters) => {
+const searchAndScrape = async (parameters) => {
 	const {
 		location,
 		min_price,
@@ -207,3 +207,5 @@ export const searchAndScrape = async (parameters) => {
 		throw error;
 	}
 };
+
+module.exports = { searchAndScrape };

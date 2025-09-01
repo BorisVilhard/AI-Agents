@@ -1,17 +1,17 @@
-import {
+const {
 	exchangeCodeForTokens,
 	verifyIdToken,
 	handleAuth,
-} from '../services/googleAuthService.js';
-import {
+} = require('../services/googleAuthService.js');
+const {
 	fetchWebsiteContent,
 	extractRelevantText,
-} from '../services/webScraperService.js';
-import { analyzeBusiness } from '../services/openAiService.js';
-import { sendEmail } from '../services/gmailService.js';
-import { getRefreshToken, isValidEmail } from '../utils/email.jss';
+} = require('../services/webScraperService.js');
+const { analyzeBusiness } = require('../services/openAiService.js');
+const { sendEmail } = require('../services/gmailService.js');
+const { getRefreshToken, isValidEmail } = require('../utils/email.js');
 
-export const handleGoogleAuth = async (req, res) => {
+const handleGoogleAuth = async (req, res) => {
 	const { code } = req.body;
 
 	if (!code) {
@@ -53,7 +53,7 @@ export const handleGoogleAuth = async (req, res) => {
 	}
 };
 
-export const processLeads = async (req, res) => {
+const processLeads = async (req, res) => {
 	const refreshToken = getRefreshToken(req);
 
 	if (!refreshToken) {
@@ -155,7 +155,7 @@ export const processLeads = async (req, res) => {
 	}
 };
 
-export const sendSingleEmail = async (req, res) => {
+const sendSingleEmail = async (req, res) => {
 	const refreshToken = getRefreshToken(req);
 
 	if (!refreshToken) {
@@ -182,3 +182,5 @@ export const sendSingleEmail = async (req, res) => {
 			.json({ message: 'Failed to send email', error: err.message });
 	}
 };
+
+module.exports = { handleGoogleAuth, processLeads, sendSingleEmail };

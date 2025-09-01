@@ -1,7 +1,7 @@
-import axios from 'axios';
-import cheerio from 'cheerio';
-import puppeteer from 'puppeteer';
-import { URL } from 'url';
+const axios = require('axios');
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
+const { URL } = require('url');
 
 const headers = {
 	'User-Agent':
@@ -20,7 +20,7 @@ const headers = {
 	DNT: '1',
 };
 
-export const fetchWebsiteContent = async (website) => {
+const fetchWebsiteContent = async (website) => {
 	try {
 		const response = await axios.get(website, { timeout: 15000, headers });
 		return response.data;
@@ -73,7 +73,7 @@ const fetchWithPuppeteer = async (website) => {
 	return html;
 };
 
-export const extractRelevantText = (html) => {
+const extractRelevantText = (html) => {
 	const $ = cheerio.load(html);
 	let text = '';
 
@@ -115,3 +115,5 @@ export const extractRelevantText = (html) => {
 
 	return text.substring(0, 15000);
 };
+
+module.exports = { fetchWebsiteContent, extractRelevantText };
